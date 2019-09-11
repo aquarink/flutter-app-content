@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+
+import 'package:shared_preferences/shared_preferences.dart';
+
 import 'screen/Home.dart';
+import 'package:quego_6/screen/LoginMobileNumber.dart';
 
 class MainScreen extends StatefulWidget {
   @override
@@ -9,6 +13,25 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   PageController _pageController;
   int _page = 0;
+
+  _logout() async {
+    final prefs = await SharedPreferences.getInstance();
+    final key = 'token_local';
+    final value = null;
+    prefs.setString(key, value);
+    print('saved $value');
+
+    //STATE
+    setState(() {
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => LoginMobileNumber(),
+          ));
+
+      print("Logout");
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -73,13 +96,14 @@ class _MainScreenState extends State<MainScreen> {
             ),
             IconButton(
               icon: Icon(
-                Icons.person,
+                Icons.offline_bolt,
                 size: 24.0,
               ),
               color: _page == 4
                   ? Colors.yellowAccent // warna icon ada menu bottom bar
                   : Theme.of(context).textTheme.caption.color,
-              onPressed: () => _pageController.jumpToPage(4),
+              // onPressed: () => _pageController.jumpToPage(4),
+              onPressed: _logout,
             ),
             SizedBox(width: 7),
           ],
